@@ -1,0 +1,143 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a Swagger documentation.",
+        "title": "auth Service API",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {},
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/api/v1",
+    "paths": {
+        "/": {
+            "get": {
+                "description": "Отображает страницу с кнопкой для входа через GitHub",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "text/html"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Домашняя страница",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/github/callback": {
+            "get": {
+                "description": "Обрабатывает ответ от GitHub после успешной авторизации",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Callback от GitHub",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Код авторизации от GitHub",
+                        "name": "code",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_hse-revizor_auth-service_internal_pkg_models.GitHubUser"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            }
+        },
+        "/login": {
+            "get": {
+                "description": "Перенаправляет пользователя на страницу авторизации GitHub",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Вход через GitHub",
+                "responses": {
+                    "307": {
+                        "description": "Redirect to GitHub",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "gin.H": {
+            "type": "object",
+            "additionalProperties": {}
+        },
+        "github_com_hse-revizor_auth-service_internal_pkg_models.GitHubUser": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "description": "Время создания записи",
+                    "type": "string",
+                    "example": "2024-03-20T15:04:05Z"
+                },
+                "email": {
+                    "description": "Email пользователя",
+                    "type": "string",
+                    "example": "octocat@github.com"
+                },
+                "github_id": {
+                    "description": "ID пользователя в GitHub",
+                    "type": "integer",
+                    "example": 12345678
+                },
+                "id": {
+                    "description": "ID пользователя в нашей системе",
+                    "type": "string",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                "login": {
+                    "description": "Логин пользователя в GitHub",
+                    "type": "string",
+                    "example": "octocat"
+                },
+                "updated_at": {
+                    "description": "Время последнего обновления",
+                    "type": "string",
+                    "example": "2024-03-20T15:04:05Z"
+                }
+            }
+        }
+    }
+}
