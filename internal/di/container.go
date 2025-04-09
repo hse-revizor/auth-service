@@ -48,7 +48,7 @@ func (c *Container) GetHttpServer() *http.Server {
 
 func (c *Container) GetDB() *gorm.DB {
 	return get(&c.db, func() *gorm.DB {
-		return sql.MustNewSQLite(c.cfg)
+		return sql.MustNewPostgresDB(c.cfg)
 	})
 }
 
