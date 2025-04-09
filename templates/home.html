@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GitHub Authentication</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+        .container {
+            text-align: center;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .login-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #2da44e;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+        .login-button:hover {
+            background-color: #2c974b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Auth Service</h1>
+        <p>Click below to login with GitHub</p>
+        <a href="{{ .LoginURL }}" class="login-button">Login with GitHub</a>
+    </div>
+</body>
+</html>

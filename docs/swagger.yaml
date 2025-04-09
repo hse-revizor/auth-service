@@ -30,7 +30,7 @@ definitions:
         example: "2024-03-20T15:04:05Z"
         type: string
     type: object
-host: localhost:8080
+host: localhost:8383
 info:
   contact: {}
   description: This is a Swagger documentation.

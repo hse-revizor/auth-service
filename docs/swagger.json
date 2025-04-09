@@ -11,7 +11,7 @@
         },
         "version": "1.0"
     },
-    "host": "localhost:8080",
+    "host": "localhost:8383",
     "basePath": "/api/v1",
     "paths": {
         "/": {

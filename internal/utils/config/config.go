@@ -41,24 +41,41 @@ type GitHubConfig struct {
 	RedirectURL  string
 }
 
-func LoadConfig(envMode, path string) (*Config, error) {
+func LoadConfig(envMode string) (*Config, error) {
 	mode, err := validateEnvMode(envMode)
 	if err != nil {
 		return nil, err
 	}
 
 	config := new(Config)
+	viper.AutomaticEnv()
 
-	viper.SetConfigFile(path)
+	viper.SetDefault("PORT", 8383)
+	viper.SetDefault("HOST", "localhost")
+	viper.SetDefault("DB_HOST", "localhost")
+	viper.SetDefault("DB_PORT", 5432)
+	viper.SetDefault("DB_NAME", "postgres")
+	viper.SetDefault("DB_USER", "user")
+	viper.SetDefault("DB_PASSWORD", "password")
+	viper.SetDefault("DB_SSLMODE", "disable")
+	viper.SetDefault("GITHUB_CLIENT_ID", "Ov23licEPfBjzQdvCOIl")
+	viper.SetDefault("GITHUB_CLIENT_SECRET", "ec1cedd8b1638df6d95e86c93f0a52012a897c15")
+	viper.SetDefault("GITHUB_REDIRECT_URL", "http://localhost:8383/api/v1/auth/github/callback")
 
-	err = viper.ReadInConfig()
-	if err != nil {
-		return nil, err
+	config.Port = uint16(viper.GetInt("PORT"))
+	config.Host = viper.GetString("HOST")
+	config.DB = DataBaseConfig{
+		Host:     viper.GetString("DB_HOST"),
+		Port:     uint16(viper.GetInt("DB_PORT")),
+		Name:     viper.GetString("DB_NAME"),
+		Username: viper.GetString("DB_USER"),
+		Password: viper.GetString("DB_PASSWORD"),
+		SSLMode:  viper.GetString("DB_SSLMODE"),
 	}
-
-	err = viper.Unmarshal(config)
-	if err != nil {
-		return nil, err
+	config.GitHub = GitHubConfig{
+		ClientID:     viper.GetString("GITHUB_CLIENT_ID"),
+		ClientSecret: viper.GetString("GITHUB_CLIENT_SECRET"),
+		RedirectURL:  viper.GetString("GITHUB_REDIRECT_URL"),
 	}
 
 	config.EnvMode = mode
@@ -66,15 +83,14 @@ func LoadConfig(envMode, path string) (*Config, error) {
 	return config, nil
 }
 
-func MustLoadConfig(envMode, path string) *Config {
-	config, err := LoadConfig(envMode, path)
+func MustLoadConfig(envMode string) *Config {
+	config, err := LoadConfig(envMode)
 	if err != nil {
 		panic(err)
 	}
 
 	return config
 }
-
 func validateEnvMode(envMode string) (uint8, error) {
 	var mode uint8
 	switch envMode {

@@ -55,7 +55,6 @@ func MustNewPostgresDB(cfg *config.Config) *gorm.DB {
 }
 
 func NewSQLIteDB(cfg *config.Config) (*gorm.DB, error) {
-
 	return gorm.Open(sqlite.Open("devdb.db"), &gorm.Config{
 		TranslateError: true,
 	})
@@ -67,10 +66,10 @@ func MustNewSQLite(cfg *config.Config) *gorm.DB {
 		panic(err)
 	}
 	err = db.AutoMigrate(&models.GitHubUser{})
-
 	if err != nil {
 		panic(err)
 	}
+	
 	return db
 }
 

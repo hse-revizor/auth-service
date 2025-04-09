@@ -4,20 +4,26 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
-// GitHubUser представляет пользователя GitHub в системе
 type GitHubUser struct {
-	// ID пользователя в нашей системе
-	ID uuid.UUID `gorm:"type:uuid;primary_key;default:uuid_generate_v4()" json:"id" example:"123e4567-e89b-12d3-a456-426614174000"`
-	// ID пользователя в GitHub
-	GitHubID int `gorm:"unique" json:"github_id" example:"12345678"`
-	// Логин пользователя в GitHub
-	Login string `gorm:"unique" json:"login" example:"octocat"`
-	// Email пользователя
-	Email string `json:"email" example:"octocat@github.com"`
-	// Время создания записи
-	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at" example:"2024-03-20T15:04:05Z"`
-	// Время последнего обновления
-	UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at" example:"2024-03-20T15:04:05Z"`
+	ID        uuid.UUID `gorm:"type:uuid;primary_key" json:"id"`
+	GitHubID  int       `gorm:"unique;column:github_id" json:"github_id" `
+	Login     string    `gorm:"unique;column:login" json:"login"`
+	Email     *string   `json:"email"`
+	Name      *string   `json:"name"`
+	Company   *string   `json:"company"`
+	Location  *string   `json:"location"`
+	Bio       *string   `json:"bio"`
+	AvatarURL string    `json:"avatar_url"`
+	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
+	UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
+}
+
+func (g *GitHubUser) BeforeCreate(tx *gorm.DB) error {
+	if g.ID == uuid.Nil {
+		g.ID = uuid.New()
+	}
+	return nil
 }

@@ -114,10 +114,32 @@ func (h *AuthHandler) fetchGitHubUser(client *http.Client) (*models.GitHubUser, 
 		return nil, err
 	}
 	defer resp.Body.Close()
+	type GitHubResponse struct {
+		ID        int    `json:"id"`
+		Login     string `json:"login"`
+		Email     string `json:"email"`
+		Name      string `json:"name"`
+		Company   string `json:"company"`
+		Location  string `json:"location"`
+		Bio       string `json:"bio"`
+		AvatarURL string `json:"avatar_url"`
+	}
 
-	var user models.GitHubUser
-	if err := json.NewDecoder(resp.Body).Decode(&user); err != nil {
+	var ghResp GitHubResponse
+	if err := json.NewDecoder(resp.Body).Decode(&ghResp); err != nil {
 		return nil, err
 	}
-	return &user, nil
+
+	// Преобразуем в нашу модель пользователя
+	user := &models.GitHubUser{
+		GitHubID:  ghResp.ID,
+		Login:     ghResp.Login,
+		Email:     &ghResp.Email,
+		Name:      &ghResp.Name,
+		Company:   &ghResp.Company,
+		Location:  &ghResp.Location,
+		Bio:       &ghResp.Bio,
+		AvatarURL: ghResp.AvatarURL,
+	}
+	return user, nil
 }

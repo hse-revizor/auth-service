@@ -8,8 +8,7 @@ import (
 
 func (s *Storage) CreateUser(ctx context.Context, user *models.GitHubUser) (*models.GitHubUser, error) {
 	tr := s.getter.DefaultTrOrDB(ctx, s.db).WithContext(ctx)
-
-	if err := tr.Create(user).Error; err != nil {
+	if err := tr.Create(&user).Error; err != nil {
 		if isDuplicateError(err) {
 			return nil, ErrEntityExists
 		}

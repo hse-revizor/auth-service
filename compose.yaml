@@ -1,16 +1,19 @@
 version: '3.8'
 services:
   auth:
-    image: revizor_auth_back:1.0
+    build: .
     ports:
-      - "8787:8787"
+      - "8383:8383"
     environment:
       - DB_HOST=db
       - DB_PORT=5432
       - DB_USER=user
       - DB_PASSWORD=password
       - DB_NAME=postgres
-      - SERVE_PORT=8787
+      - SERVER_PORT=8383
+      - GITHUB_CLIENT_ID=Ov23licEPfBjzQdvCOIl
+      - GITHUB_CLIENT_SECRET=ec1cedd8b1638df6d95e86c93f0a52012a897c15
+      - GITHUB_REDIRECT_URL=http://localhost:8383/api/v1/auth/github/callback
     networks:
       - auth_network
     depends_on:
