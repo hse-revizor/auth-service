@@ -58,8 +58,8 @@ func LoadConfig(envMode string) (*Config, error) {
 	viper.SetDefault("DB_USER", "user")
 	viper.SetDefault("DB_PASSWORD", "password")
 	viper.SetDefault("DB_SSLMODE", "disable")
-	viper.SetDefault("GITHUB_CLIENT_ID", "Ov23licEPfBjzQdvCOIl")
-	viper.SetDefault("GITHUB_CLIENT_SECRET", "ec1cedd8b1638df6d95e86c93f0a52012a897c15")
+	viper.SetDefault("GITHUB_CLIENT_ID", "client-id")
+	viper.SetDefault("GITHUB_CLIENT_SECRET", "client-secret")
 	viper.SetDefault("GITHUB_REDIRECT_URL", "http://localhost:8383/api/v1/auth/github/callback")
 
 	config.Port = uint16(viper.GetInt("PORT"))
