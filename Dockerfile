@@ -19,7 +19,3 @@ WORKDIR /app
 RUN mkdir -p /app/templates
 COPY --from=builder /app/cmd/service/main /app/cmd/service/main
 COPY --from=builder /app/templates/* /app/templates/
-
-EXPOSE 8383
-
-CMD ["./cmd/service/main", "-env-mode=development"]

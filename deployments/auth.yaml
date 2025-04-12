@@ -1,0 +1,64 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth
+spec:
+  selector:
+    app: auth
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+---
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth
+spec:
+  selector:
+    matchLabels:
+      app: auth
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: auth
+    spec:
+      containers:
+        - name: auth
+          image: iluhander/r-auth-service:1.0
+          imagePullPolicy: Always
+          command: ["./main"]
+          args: ["-env-mode=development"]
+          env:
+            - name: DB_HOST
+            value: "62.113.42.34"
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_USER
+              value: "dscjbk4h"
+            - name: DB_PASSWORD
+              value: "ejqblrkv23"
+            - name: DB_NAME
+              value: "revizor"
+            - name: PORT
+              value: "8383"
+            - name: HOST
+              value: "0.0.0.0"
+            - name: GITHUB_CLIENT_ID
+              value: "Ov23liQqNHIl46vs9AuL"
+            - name: GITHUB_CLIENT_SECRET
+              value: "4ece119f2eb2f37930668092080190e225ee9d2b"
+            - name: GITHUB_REDIRECT_URL
+              value: "http://hse-revizor-test.appweb.space/auth-api/api/v1/auth/github/callback"
+          ports:
+            - containerPort: 80
+              name: http
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 100m
+              memory: 256Mi
